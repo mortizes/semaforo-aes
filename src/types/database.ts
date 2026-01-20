@@ -23,18 +23,18 @@ export interface StatusLog {
   changed_at: string;
 }
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       aes: {
         Row: AE;
-        Insert: Omit<AE, "id" | "created_at" | "updated_at" | "last_change_at">;
-        Update: Partial<Omit<AE, "id" | "created_at">>;
+        Insert: Partial<AE> & { name: string };
+        Update: Partial<AE>;
       };
       status_logs: {
         Row: StatusLog;
         Insert: Omit<StatusLog, "id" | "changed_at">;
-        Update: never;
+        Update: Partial<StatusLog>;
       };
     };
     Enums: {
@@ -42,4 +42,4 @@ export interface Database {
       ae_mode: AeMode;
     };
   };
-}
+};
