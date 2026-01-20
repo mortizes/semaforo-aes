@@ -51,10 +51,7 @@ El **skill** es un archivo que le dice a Cursor cómo debe trabajar. Incluye:
 - Estructura de archivos
 - Comandos de instalación
 
-**Ubicación del skill usado:**
-```
-Skills/nextjs-fullstack/SKILL.md
-```
+> ⚠️ **Nota:** El skill original (`Skills/nextjs-fullstack/SKILL.md`) es un documento privado del equipo. Si necesitas acceso, solicítalo internamente. Sin embargo, la información esencial del stack y configuración está documentada en el [README.md](./README.md) de este repositorio.
 
 **Stack definido en el skill:**
 | Capa | Tecnología |
@@ -254,7 +251,9 @@ Del meeting se identificaron mejoras futuras:
 ## 9. Recursos para replicar
 
 ### Archivos necesarios:
-1. **Skill de Next.js Fullstack** - Define el stack y mejores prácticas
+1. **Skill de Next.js Fullstack** (documento privado)
+   - Solicitar acceso internamente si lo necesitas
+   - La configuración esencial está en el [README.md](./README.md) de este repo
 2. **MCPs configurados:**
    - `user-supabase` - Para crear/gestionar base de datos
    - `user-github` - Para repositorios
