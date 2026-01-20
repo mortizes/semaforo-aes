@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Semáforo de AEs
 
-## Getting Started
+Sistema de gestión de ocupación para Account Executives (AEs) del equipo de ventas. Permite visualizar en tiempo real el estado de disponibilidad de cada AE para la asignación de llamadas.
 
-First, run the development server:
+## Características
+
+- **Estado de Disponibilidad**: Switch principal que determina si un AE puede recibir llamadas
+- **Estado Secundario**: Disponible / Ocupado (para información adicional)
+- **Modalidad**: Presencial / Remoto / Off / Vacaciones
+- **Regla Automática**: Al seleccionar "Off" o "Vacaciones", se marca automáticamente como no disponible
+- **Tiempo Real**: Sincronización instantánea con Supabase Realtime
+- **Métricas**: Minutos desde el último cambio y fecha del último estado "Disponible"
+- **CRUD Completo**: Agregar, editar y eliminar AEs
+
+## Tecnologías
+
+- **Framework**: Next.js 16 (App Router)
+- **UI**: React + Tailwind CSS + shadcn/ui
+- **Base de Datos**: Supabase (PostgreSQL)
+- **Tiempo Real**: Supabase Realtime
+- **Lenguaje**: TypeScript
+
+## Instalación
 
 ```bash
+# Clonar el repositorio
+git clone <repo-url>
+cd semaforo
+
+# Instalar dependencias
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env.local
+# Editar .env.local con tus credenciales de Supabase
+
+# Iniciar el servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de Entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estructura de Base de Datos
 
-## Learn More
+### Tabla `aes`
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID | Identificador único |
+| name | TEXT | Nombre del AE |
+| avatar_url | TEXT | URL del avatar (opcional) |
+| is_available | BOOLEAN | Disponible para recibir llamadas |
+| status | ENUM | 'disponible' \| 'ocupado' |
+| mode | ENUM | 'presencial' \| 'remoto' \| 'off' \| 'vacaciones' |
+| last_change_at | TIMESTAMPTZ | Último cambio de estado |
+| last_available_at | TIMESTAMPTZ | Última vez que se puso disponible |
 
-To learn more about Next.js, take a look at the following resources:
+### Triggers Automáticos
+- **auto_disable_availability**: Si el modo es "off" o "vacaciones", se deshabilita automáticamente la disponibilidad
+- **log_ae_status_change**: Registra cada cambio de estado en `status_logs`
+- **update_updated_at_column**: Actualiza el campo `updated_at` automáticamente
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Uso
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Ver Estado**: La tabla muestra todos los AEs con su estado actual
+2. **Cambiar Disponibilidad**: Click en el switch para activar/desactivar
+3. **Cambiar Estado/Modalidad**: Usar los dropdowns en cada fila
+4. **Agregar AE**: Click en "Nuevo AE" y completar el formulario
+5. **Editar/Eliminar**: Usar el menú de acciones (⋮) en cada fila
 
-## Deploy on Vercel
+## Estadísticas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+El dashboard muestra en tiempo real:
+- Total de AEs
+- AEs Disponibles (verde)
+- AEs Ocupados (rojo)
+- AEs en Off/Vacaciones (gris)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue
+
+El proyecto está configurado para desplegarse fácilmente en Vercel:
+
+```bash
+npm run build
+vercel deploy
+```
+
+## Licencia
+
+Proyecto interno - Uso exclusivo del equipo de ventas.
